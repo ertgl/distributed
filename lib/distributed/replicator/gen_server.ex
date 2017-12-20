@@ -30,7 +30,9 @@ defmodule Distributed.Replicator.GenServer do
 	"""
 	@spec info(dest :: pid | port | atom, msg :: any, opts :: [any]) :: any
 	def info(dest, msg, opts \\ []) do
-		Distributed.Parallel.map(Distributed.Node.list(opts), &(send({dest, &1}, msg)))
+		Distributed.Parallel.map(Distributed.Node.list(opts), fn node_name ->
+			{node_name, send({dest, node_name}, msg)}
+		end)
 	end
 
 	@doc """
@@ -39,7 +41,9 @@ defmodule Distributed.Replicator.GenServer do
 	@spec call(server :: atom, term, opts :: [any]) :: [term]
 	def call(server, term, opts \\ []) do
 		timeout = Keyword.get(opts, :timeout, :infinity)
-		Distributed.Parallel.map(Distributed.Node.list(opts), &(GenServer.call({server, &1}, term, timeout)))
+		Distributed.Parallel.map(Distributed.Node.list(opts), fn node_name ->
+			{node_name, GenServer.call({server, node_name}, term, timeout)}
+		end)
 	end
 
 	@doc """
@@ -47,7 +51,9 @@ defmodule Distributed.Replicator.GenServer do
 	"""
 	@spec cast(server :: atom, term :: term, opts :: [any]) :: [term]
 	def cast(server, term, opts \\ []) do
-		Distributed.Parallel.map(Distributed.Node.list(opts), &(GenServer.cast({server, &1}, term)))
+		Distributed.Parallel.map(Distributed.Node.list(opts), fn node_name ->
+			{node_name, GenServer.cast({server, node_name}, term)}
+		end)
 	end
 
 end

@@ -48,8 +48,9 @@ defmodule Storage.KV do
 	end
 
 	def set(key, value) do
-		Distributed.Replicator.GenServer.cast(__MODULE__.process_id(), {:set, key, value})
-		|> List.first()
+		{_node_name, result} = Distributed.Replicator.GenServer.cast(__MODULE__.process_id(), {:set, key, value})
+			|> List.first()
+		result
 	end
 
 	def has?(key) do
@@ -57,8 +58,9 @@ defmodule Storage.KV do
 	end
 
 	def pop(key, default \\ nil) do
-		Distributed.Replicator.GenServer.call(__MODULE__.process_id(), {:pop, key, default})
-		|> List.first()
+		{_node_name, result} = Distributed.Replicator.GenServer.call(__MODULE__.process_id(), {:pop, key, default})
+			|> List.first()
+		result
 	end
 
 end
