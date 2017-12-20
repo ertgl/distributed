@@ -9,7 +9,7 @@ defmodule Distributed.Mixfile do
 			description: description(),
 			package: package(),
 			app: :distributed,
-			version: "0.1.2",
+			version: "0.1.3",
 			elixir: "~> 1.4",
 			build_embedded: Mix.env() == :prod,
 			start_permanent: Mix.env() == :prod,

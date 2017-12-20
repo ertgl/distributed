@@ -85,7 +85,7 @@ end
 
 def deps do
 	[
-		{:distributed, "~> 0.1.0"},
+		{:distributed, "~> 0.1.3"},
 	]
 end
 ```
